@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import './Combo.css';
 
 function Combo() {
-  const [conditions, setConditions] = useState({});
+  //const [conditions, setConditions] = useState({});
   const [handsize, setHandsize] = useState(5);
   const [atLeast, setAtLeast] = useState(0);
 
