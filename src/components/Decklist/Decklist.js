@@ -40,9 +40,9 @@ function Decklist() {
                 <label htmlFor={nameId}>Card Name: </label>
                 <input type="text" name={nameId} data-index={index} id={nameId} className="cardname" value={decklist[index].name} onChange={handleCardChange} />
                 <label htmlFor={nameId}>Copies: </label>
-                <input type="number" name={copiesId} data-index={index} id={copiesId} className="copies" value={decklist[index].copies} onChange={handleCopyChange} />
-                {index === decklist.length - 1 &&
-                  <input type="button" value="+" onClick={addCardEntryRow} />
+                <input type="number" name={copiesId} data-index={index} id={copiesId} className="copies" value={decklist[index].copies} onChange={handleCopyChange} min="1" max="3" />
+                {index === decklist.length - 1 && (decklist[index].copies >= 1 && decklist[index].copies <= 3) && decklist[index].name.length > 0 &&
+                  <input type="button" value="Add Card" onClick={addCardEntryRow} />
                 }
               </div>
             );
@@ -51,8 +51,16 @@ function Decklist() {
       </form>
       {
         decklist.map((value, index) => {
+          let cardLine;
+          if (value.copies >= 1 && value.copies <= 3){
+            cardLine = <p key={`${value}-${index}`}>{value.name} {value.copies}</p>
+          } else {
+            cardLine = <></>
+          }
           return (
-            <p key={`${value}=${index}`}>{value.name} {value.copies}</p>
+            <div key={`cardLine-${value}=${index}`}>
+              {cardLine}
+            </div>
           );
         })
       }
