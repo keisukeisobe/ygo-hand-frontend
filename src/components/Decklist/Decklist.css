@@ -1,0 +1,28 @@
+.deckmaker-container {
+  display: flex;
+  justify-content: center;
+}
+
+.decklist-form {
+  margin: auto;
+}
+
+.cardname-copies-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* .cardname-copies-column {
+}
+
+.add-button-column {
+}  */
+
+.add-card-button {
+  width: 100%;
+}
+
+.hidden {
+  visibility: hidden;
+}
