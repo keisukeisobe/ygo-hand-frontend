@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import Search from './Search/Search';
 import './Decklist.css';
 
 function Decklist() {
@@ -10,7 +11,10 @@ function Decklist() {
   const [decklist, setDecklist] = useState([
     {...blankCardEntry}
   ]);
-  const [searchResults, setSearchResults] = useState([]);
+
+  const [search, setSearch] = useState(['']);
+
+  const [searchResults, setSearchResults] = useState(['']);
 
   const addCardEntryRow = () => {
     setDecklist([...decklist, {...blankCardEntry}]);
@@ -20,33 +24,12 @@ function Decklist() {
     const updatedDecklist = [...decklist];
     updatedDecklist[event.target.dataset.index].name = event.target.value;
     setDecklist(updatedDecklist);
-    const results = searchCard(event.target.value);
-    setSearchResults(results);
   }  
   
   const handleCopyChange = (event) => {
     const updatedDecklist = [...decklist];
     updatedDecklist[event.target.dataset.index].copies = event.target.value;
     setDecklist(updatedDecklist);
-  }
-
-  const searchCard = (search) => {
-    const url = 'https://db.ygoprodeck.com/api/v7/cardinfo.php';
-    const searchParam = encodeURI(search);
-    fetch(`${url}?fname=${searchParam}`)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error(response.statusText);
-      })
-      .then(responseJson => {
-        const data = responseJson.data.map(element => element.name);
-        console.log(data);
-        return data;
-      })
-      .catch(err => {
-      })
   }
 
   return (
@@ -69,7 +52,7 @@ function Decklist() {
                   <div className="add-button-column">  
                     {index === decklist.length - 1 && (decklist[index].copies >= 1 && decklist[index].copies <= 3) && decklist[index].name.length > 0 ?
                         <input className="add-card-button" type="button" value="Add Card" onClick={addCardEntryRow} /> :
-                        <input className="add-button-column hidden" type="button" value="Add Card" onClick={addCardEntryRow} />
+                        <input className="add-button-column hidden" type="button" value="Add Card" />
                     }
                   </div>
                 </div>
