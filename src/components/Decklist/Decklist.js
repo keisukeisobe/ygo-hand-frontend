@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import Search from './Search/Search';
 import './Decklist.css';
 
 function Decklist() {
@@ -11,10 +10,6 @@ function Decklist() {
   const [decklist, setDecklist] = useState([
     {...blankCardEntry}
   ]);
-
-  const [search, setSearch] = useState(['']);
-
-  const [searchResults, setSearchResults] = useState(['']);
 
   const addCardEntryRow = () => {
     setDecklist([...decklist, {...blankCardEntry}]);
