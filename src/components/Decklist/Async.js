@@ -68,7 +68,7 @@ function Async() {
   return (
     <Autocomplete
       id="search"
-      style={{ width: 600 }}
+      style={{ width: 800 }}
       open={open}
       onOpen={() => {
         setOpen(true);
