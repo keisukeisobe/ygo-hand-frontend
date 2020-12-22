@@ -12,6 +12,8 @@ function sleep(delay = 0) {
 }
 
 function Search() {
+  const [decklist, setDecklist] = useState([]);
+  const [copies, setCopies] = useState(0);
   //open or closed state, default closed
   const [open, setOpen] = useState(false);
   //options from which to load dropdown
@@ -23,7 +25,7 @@ function Search() {
 
   useEffect(() => {
     let active = true;
-    //if there is no user input, reset the options to blank, do nothing-- this is to prevent excessive API calls/load times/response size
+    //if user input is short, reset the options to blank, do nothing-- this is to prevent excessive API calls/load times/response size
     if(inputValue.length < 3) {
       setOptions([]);
     }
@@ -68,45 +70,67 @@ function Search() {
     }
   }, [open]);
 
-  return (
-    <Autocomplete
-      id="search"
-      style={{ width: 800, margin: 15}}
-      open={open}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      getOptionSelected={(option, value) => option === value}
-      getOptionLabel={(option) => option}
-      options={options}
-      loading={loading}
-      onChange={(event, newValue) => {
-        setOptions(newValue ? [newValue, ...options] : options);
-      }}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
+  const addCard = (event) => {
+    event.preventDefault();
+    const updatedDecklist = [...decklist];
+    updatedDecklist.push({name: inputValue, copies: copies});
+    setCopies(0);
+    setInputValue("");
+    setDecklist(updatedDecklist);
+  }
 
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Search A Card"
-          variant="outlined"
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            ),
-          }}
-        />
-      )}
-    />
+  const handleCopyChange = (event) => {
+    setCopies(event.target.value);
+  }
+
+  return (
+    <form>
+      <Autocomplete
+        id="search"
+        style={{ width: 600, margin: 15}}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+        }}
+        onClose={() => {
+          setOpen(false);
+        }}
+        value={inputValue}
+        getOptionSelected={(option, value) => option === value}
+        getOptionLabel={(option) => option}
+        options={options}
+        loading={loading}
+        onChange={(event, newValue) => {
+          console.log('on change');
+          setOptions(newValue ? [newValue, ...options] : options);
+        }}
+        onInputChange={(event, newValue) => {
+          setInputValue(newValue);
+        }}
+
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search A Card"
+            variant="outlined"
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <React.Fragment>
+                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                  {params.InputProps.endAdornment}
+                </React.Fragment>
+              ),
+            }}
+          />
+        )}
+      />
+      <label htmlFor={inputValue}>Copies: </label>
+      <input type="number" name={inputValue} id={inputValue} value={copies} onChange={handleCopyChange} />
+      <button onClick={addCard}>
+        Add Card
+      </button>            
+    </form>
   );
 }
 

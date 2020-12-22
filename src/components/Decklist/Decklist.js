@@ -41,7 +41,7 @@ function Decklist() {
                   <div className="cardname-copies-column">
                     <label htmlFor={nameId}>Card Name: </label>
                     <input type="text" name={nameId} data-index={index} id={nameId} className="cardname" value={decklist[index].name} onChange={handleCardChange} />
-                    <label htmlFor={nameId}>Copies: </label>
+                    <label htmlFor={copiesId}>Copies: </label>
                     <input type="number" name={copiesId} data-index={index} id={copiesId} className="copies" value={decklist[index].copies} onChange={handleCopyChange} min="1" max="3" />
                   </div>
                   <div className="add-button-column">  
