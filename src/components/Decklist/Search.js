@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import './Search.css';
 
 function sleep(delay = 0) {
   return new Promise((resolve) => {
@@ -10,19 +11,19 @@ function sleep(delay = 0) {
   });
 }
 
-function Async() {
+function Search() {
   //open or closed state, default closed
   const [open, setOpen] = useState(false);
   //options from which to load dropdown
   const [options, setOptions] = useState([]);
   //value of user input
   const [inputValue, setInputValue] = useState('');
-  //WORK ON THE LOADING TOKEN: WHEN IS IT LOADING?
-  let loading = open && options.length === 0;
+  //the search is "loading" when the combobox is open, there are more than 3 characters in search input, and there is at least 1 dropdown option
+  let loading = open && inputValue.length >= 3 && options.length < 1;
 
   useEffect(() => {
     let active = true;
-    //if there is no user input, reset the options to blank, do nothing
+    //if there is no user input, reset the options to blank, do nothing-- this is to prevent excessive API calls/load times/response size
     if(inputValue.length < 3) {
       setOptions([]);
     }
@@ -37,10 +38,12 @@ function Async() {
           .then(response => {
             if (response.ok) {
               return response.json();
-            } 
-            else {
+            } else {
               return {data: [{name: "No such cards in database."}]};
             }
+          })
+          .catch(error => {
+            console.log(error);
           })
         await sleep(1e2); // For timeout purposes.
         let cards = await response;
@@ -68,7 +71,7 @@ function Async() {
   return (
     <Autocomplete
       id="search"
-      style={{ width: 800 }}
+      style={{ width: 800, margin: 15}}
       open={open}
       onOpen={() => {
         setOpen(true);
@@ -90,7 +93,7 @@ function Async() {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Asynchronous"
+          label="Search A Card"
           variant="outlined"
           InputProps={{
             ...params.InputProps,
@@ -107,4 +110,4 @@ function Async() {
   );
 }
 
-export default Async;
+export default Search;
