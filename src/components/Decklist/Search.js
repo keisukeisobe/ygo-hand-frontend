@@ -74,7 +74,7 @@ function Search() {
     event.preventDefault();
     const updatedDecklist = [...decklist];
     updatedDecklist.push({name: inputValue, copies: copies});
-    setCopies(0);
+    setCopies(1);
     setInputValue("");
     setDecklist(updatedDecklist);
   }
@@ -84,54 +84,63 @@ function Search() {
   }
 
   return (
-    <form>
-      <div className="flex-outer">
-        <Autocomplete
-          id="search"
-          style={{ width: 600, margin: '15px 5px'}}
-          open={open}
-          onOpen={() => {
-            setOpen(true);
-          }}
-          onClose={() => {
-            setOpen(false);
-          }}
-          value={inputValue}
-          getOptionSelected={(option, value) => option === value}
-          getOptionLabel={(option) => option}
-          options={options}
-          loading={loading}
-          onChange={(event, newValue) => {
-            console.log('on change');
-            setOptions(newValue ? [newValue, ...options] : options);
-          }}
-          onInputChange={(event, newValue) => {
-            setInputValue(newValue);
-          }}
+    <>
+      <form>
+        <div className="flex-outer">
+          <Autocomplete
+            id="search"
+            style={{ width: 600, margin: '15px 5px'}}
+            open={open}
+            onOpen={() => {
+              setOpen(true);
+            }}
+            onClose={() => {
+              setOpen(false);
+            }}
+            value={inputValue}
+            getOptionSelected={(option, value) => option === value}
+            getOptionLabel={(option) => option}
+            options={options}
+            loading={loading}
+            onChange={(event, newValue) => {
+              console.log('on change');
+              setOptions(newValue ? [newValue, ...options] : options);
+            }}
+            onInputChange={(event, newValue) => {
+              setInputValue(newValue);
+            }}
 
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Search A Card"
-              variant="outlined"
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <React.Fragment>
-                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                    {params.InputProps.endAdornment}
-                  </React.Fragment>
-                ),
-              }}
-            />
-          )}
-        />
-          <input type="number" className="add-copies-input" name={inputValue} id={inputValue} value={copies} onChange={handleCopyChange} min={1} max={3}/>
-          <button className="add-copies-btn" onClick={addCard}>
-            Add
-          </button>
-      </div>            
-    </form>
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Search A Card"
+                variant="outlined"
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <React.Fragment>
+                      {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                      {params.InputProps.endAdornment}
+                    </React.Fragment>
+                  ),
+                }}
+              />
+            )}
+          />
+            <input type="number" className="add-copies-input" name={inputValue} id={inputValue} value={copies} onChange={handleCopyChange} min={1} max={3}/>
+            <button className="add-copies-btn" onClick={addCard}>
+              Add
+            </button>
+        </div>            
+      </form>
+      <h2>Decklist</h2>
+      <h3>Main Deck</h3>
+      <ul className="ul-decklist">
+        {decklist.map((element, index) => <li className="li-decklist" key={`${element.name}-${index}`}>{element.copies} {element.name}</li>)}
+      </ul>
+      <h3>Extra Deck</h3>
+      
+    </>
   );
 }
 
