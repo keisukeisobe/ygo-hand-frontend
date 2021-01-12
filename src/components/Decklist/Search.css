@@ -1,0 +1,44 @@
+.flex-outer {
+  display: flex;
+}
+
+.add-copies-input {
+  border: 1px solid grey;
+  width: 25px;
+  font-size: 18px;
+  margin: 15px 0px;
+  text-align: center;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 4px;
+}
+
+.add-copies-input:focus {
+  border: 2px solid rgb(11, 11, 177);
+  outline: none;
+}
+
+.add-copies-input:hover {
+  border: 1px solid black;
+}
+
+.add-copies-btn {
+  margin: 15px 5px;;
+  width: 60px;
+  font-size: 18px;
+  outline: none;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 4px;
+}
+
+.add-copies-btn:hover {
+  background-color: rgb(219, 219, 219);
+  border: 1px solid black;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}

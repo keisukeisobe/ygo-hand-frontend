@@ -13,7 +13,7 @@ function sleep(delay = 0) {
 
 function Search() {
   const [decklist, setDecklist] = useState([]);
-  const [copies, setCopies] = useState(0);
+  const [copies, setCopies] = useState(1);
   //open or closed state, default closed
   const [open, setOpen] = useState(false);
   //options from which to load dropdown
@@ -85,51 +85,52 @@ function Search() {
 
   return (
     <form>
-      <Autocomplete
-        id="search"
-        style={{ width: 600, margin: 15}}
-        open={open}
-        onOpen={() => {
-          setOpen(true);
-        }}
-        onClose={() => {
-          setOpen(false);
-        }}
-        value={inputValue}
-        getOptionSelected={(option, value) => option === value}
-        getOptionLabel={(option) => option}
-        options={options}
-        loading={loading}
-        onChange={(event, newValue) => {
-          console.log('on change');
-          setOptions(newValue ? [newValue, ...options] : options);
-        }}
-        onInputChange={(event, newValue) => {
-          setInputValue(newValue);
-        }}
+      <div className="flex-outer">
+        <Autocomplete
+          id="search"
+          style={{ width: 600, margin: '15px 5px'}}
+          open={open}
+          onOpen={() => {
+            setOpen(true);
+          }}
+          onClose={() => {
+            setOpen(false);
+          }}
+          value={inputValue}
+          getOptionSelected={(option, value) => option === value}
+          getOptionLabel={(option) => option}
+          options={options}
+          loading={loading}
+          onChange={(event, newValue) => {
+            console.log('on change');
+            setOptions(newValue ? [newValue, ...options] : options);
+          }}
+          onInputChange={(event, newValue) => {
+            setInputValue(newValue);
+          }}
 
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search A Card"
-            variant="outlined"
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <React.Fragment>
-                  {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </React.Fragment>
-              ),
-            }}
-          />
-        )}
-      />
-      <label htmlFor={inputValue}>Copies: </label>
-      <input type="number" name={inputValue} id={inputValue} value={copies} onChange={handleCopyChange} />
-      <button onClick={addCard}>
-        Add Card
-      </button>            
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Search A Card"
+              variant="outlined"
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <React.Fragment>
+                    {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </React.Fragment>
+                ),
+              }}
+            />
+          )}
+        />
+          <input type="number" className="add-copies-input" name={inputValue} id={inputValue} value={copies} onChange={handleCopyChange} min={1} max={3}/>
+          <button className="add-copies-btn" onClick={addCard}>
+            Add
+          </button>
+      </div>            
     </form>
   );
 }
