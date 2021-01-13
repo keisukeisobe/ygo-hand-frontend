@@ -13,6 +13,8 @@ function sleep(delay = 0) {
 
 function Search() {
   const [decklist, setDecklist] = useState([]);
+  const [mainDecklist, setMainDecklist] = useState([]);
+  const [extraDecklist, setExtraDecklist] = useState([]);
   const [copies, setCopies] = useState(1);
   //open or closed state, default closed
   const [open, setOpen] = useState(false);
@@ -20,6 +22,7 @@ function Search() {
   const [options, setOptions] = useState([]);
   //value of user input
   const [inputValue, setInputValue] = useState('');
+  const [selectedCard, setSelectedCard] = useState('');
   //the search is "loading" when the combobox is open, there are more than 3 characters in search input, and there is at least 1 dropdown option
   let loading = open && inputValue.length >= 3 && options.length < 1;
 
@@ -51,7 +54,9 @@ function Search() {
         let cards = await response;
         cards = cards.data; 
         if (active && cards !== undefined) {
-          setOptions(cards.map(card => card.name));
+          console.log(cards);
+          setOptions(cards);
+          //setOptions(cards.map(card => card.name));
         } else {
           setOptions([]);
         }
@@ -71,12 +76,23 @@ function Search() {
   }, [open]);
 
   const addCard = (event) => {
-    event.preventDefault();
-    const updatedDecklist = [...decklist];
-    updatedDecklist.push({name: inputValue, copies: copies});
+    event.preventDefault();    
+    //const updatedDecklist = [...decklist];
+    //updatedDecklist.push({name: inputValue, copies: copies});
+    console.log(selectedCard[0].type);
+    const extraDeckCardTypes = ["Fusion Monster", "Link Monster", "Pendulum Effect Fusion Monster", "Synchro Monster", "Synchro Pendulum Effect Monster", "Synchro Tuner Monster", "XYZ Monster", "XYZ Pendulum Effect Monster"];
+    if (extraDeckCardTypes.includes(selectedCard[0].type)){
+      const updatedExtraDecklist = [...extraDecklist];
+      updatedExtraDecklist.push({name: inputValue, copies: copies});
+      setExtraDecklist(updatedExtraDecklist);
+    } else {
+      const updatedMainDecklist = [...mainDecklist];
+      updatedMainDecklist.push({name: inputValue, copies: copies});
+      setMainDecklist(updatedMainDecklist);
+    }
     setCopies(1);
     setInputValue("");
-    setDecklist(updatedDecklist);
+    //setDecklist(updatedDecklist);
   }
 
   const handleCopyChange = (event) => {
@@ -100,10 +116,10 @@ function Search() {
             value={inputValue}
             getOptionSelected={(option, value) => option === value}
             getOptionLabel={(option) => option}
-            options={options}
+            options={options.map(card => card.name)}
             loading={loading}
             onChange={(event, newValue) => {
-              console.log('on change');
+              setSelectedCard(options.filter(card => card.name===newValue));
               setOptions(newValue ? [newValue, ...options] : options);
             }}
             onInputChange={(event, newValue) => {
@@ -136,10 +152,12 @@ function Search() {
       <h2>Decklist</h2>
       <h3>Main Deck</h3>
       <ul className="ul-decklist">
-        {decklist.map((element, index) => <li className="li-decklist" key={`${element.name}-${index}`}>{element.copies} {element.name}</li>)}
+        {mainDecklist.map((element, index) => <li className="li-decklist" key={`${element.name}-${index}`}>{element.copies} {element.name}</li>)}
       </ul>
       <h3>Extra Deck</h3>
-      
+      <ul className="ul-decklist">
+        {extraDecklist.map((element, index) => <li className="li-decklist" key={`${element.name}-${index}`}>{element.copies} {element.name}</li>)}
+      </ul>
     </>
   );
 }
